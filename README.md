@@ -44,11 +44,28 @@ Gå till **AWS Console** och skapa följande resurser manuellt:
 5. Klicka **Actions > Attach to VPC**, välj `mar13-vpc`, klicka **Attach**.
 
 ### **1.4 Uppdatera Routing Tabeller**
-1. Gå till **Route Tables**.
+#### **Publikt subnät**
+1. Gå till **Route Tables** i VPC Dashboard.
 2. Identifiera och klicka på **default route table** för `mar13-vpc`.
-3. Klicka på **Edit routes > Add route** för att lägga till en ny **rutt**:
+3. Klicka på **Edit routes > Add route**:
    - **Destination:** `0.0.0.0/0`
-   - **Target:** Internet Gateway > `mar13-igw`
+   - **Target:** Internet Gateway → `mar13-igw`
+4. Klicka **Save changes**.
+5. Gå till **Subnet Associations** för denna route table och **se till att endast** `mar13-public-subnet` är associerat.
+
+#### **Privat subnät**
+1. Gå tillbaka till **Route Tables** och klicka **Create route table**.
+   - **Name:** `mar13-private-route-table`
+   - **VPC:** `mar13-vpc`
+2. Klicka **Create** och öppna den nya route-tabellen.
+3. Klicka **Save changes**.
+4. Gå till **Subnet Associations** och associera denna route table med `mar13-private-subnet`.
+
+### **Varför behövs detta?**
+- **Det publika subnätet** behöver en väg till internet via Internet Gateway.
+- **Det privata subnätet** ska inte ha direkt internetåtkomst. Istället kan det använda en NAT Gateway (om det behöver utgående internetåtkomst) eller lämnas utan internetåtkomst.
+
+Nu bör ditt privata subnät vara korrekt isolerat, och instansen i det publika subnätet kan fungera för att nå den privata instansen.
 
 ---
 
